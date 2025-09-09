@@ -1,0 +1,121 @@
+/* Main Layout Container */
+.app-layout {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  height: calc(100vh - 8rem); /* Adjust based on header height */
+}
+
+/* Side Panel */
+.side-panel {
+  width: 25%;
+  min-width: 250px;
+  max-width: 300px;
+  background-color: #ffffff;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
+}
+
+/* Main Content Area */
+.content-view {
+  flex: 1;
+  overflow-y: auto;
+  background-color: #f9fafb; /* gray-50 */
+  /* Removed padding to eliminate space between side panel and content */
+}
+
+.content-view-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 100%;
+  padding: 1.5rem; /* Moved padding to inner container */
+}
+
+/* Content Card */
+.content-card {
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.content-card h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827; /* gray-900 */
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb; /* gray-200 */
+}
+
+/* Transaction List */
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.transaction-list__header {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.transaction-list__empty {
+  color: #6b7280;
+  text-align: center;
+  padding: 2rem 0;
+}
+
+/* Transaction Card */
+.transaction-card {
+  padding: 1rem;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.transaction-card:hover {
+  background-color: #f9fafb;
+}
+
+.transaction-card__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.transaction-card__info h3 {
+  font-weight: 500;
+  margin: 0 0 0.25rem 0;
+}
+
+.transaction-card__meta {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.transaction-card__amount {
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.transaction-card__amount--credit {
+  color: #10b981; /* green-500 */
+}
+
+.transaction-card__amount--debit {
+  color: #ef4444; /* red-500 */
+}
+
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .content-view {
+    padding: 1rem;
+  }
+  
+  .content-view-inner {
+    padding-top: 1rem;
+  }
+}

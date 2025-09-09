@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: postgres-debugger
+spec:
+  containers:
+  - name: debug
+    image: postgres:15
+    command: [ "sleep" ]
+    args: [ "infinity" ]
+    volumeMounts:
+    - mountPath: /var/lib/postgresql/data
+      name: old-db-volume
+    env:
+    - name: POSTGRES_PASSWORD
+      value: strongpassword
+  volumes:
+  - name: old-db-volume
+    persistentVolumeClaim:
+      claimName: finance-postgres-pvc 

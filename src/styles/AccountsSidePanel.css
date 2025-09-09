@@ -1,0 +1,133 @@
+/* Accounts Side Panel */
+.accounts-side-panel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  position: relative;
+}
+
+.accounts-header {
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+  text-align: center;
+  padding: 1rem 0;
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 600;
+  color: #111827; /* gray-900 */
+  border-bottom: 1px solid #e5e7eb;
+}
+
+/* Scrollable content area */
+.accounts-side-panel__content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 4rem; /* Space for Net Worth section */
+}
+
+.account-card {
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e5e7eb; /* Bottom border for each card */
+  border-left: none;
+  border-right: none;
+}
+
+.account-card:first-child {
+  border-top: 1px solid #e5e7eb; /* Top border for first card */
+}
+
+.account-card:hover {
+  background-color: #f9fafb; /* gray-50 */
+}
+
+.account-card.selected {
+  background-color: #f3f4f6; /* gray-100 */
+  position: relative;
+}
+
+.account-card.selected::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #3b82f6; /* blue-500 */
+}
+
+.account-card-content {
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.account-info {
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.account-name {
+  font-weight: 500;
+  color: #111827; /* gray-900 */
+}
+
+.account-number {
+  color: #6b7280; /* gray-500 */
+}
+
+.account-balance {
+  font-size: 0.875rem; /* text-sm */
+  font-weight: 500; /* font-medium */
+  color: #111827; /* gray-900 */
+  text-align: left;
+  white-space: nowrap;
+}
+
+/* Net Worth Section */
+.net-worth-section {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.net-worth-label {
+  color: #4b5563; /* gray-600 */
+  font-size: 0.9375rem; /* text-sm */
+}
+
+.net-worth-amount {
+  color: #111827; /* gray-900 */
+  font-size: 1.125rem; /* text-lg */
+  font-weight: 700;
+}
+
+/* Loading and Error States */
+.loading-state,
+.error-state {
+  padding: 1rem;
+  text-align: center;
+  color: #6b7280; /* gray-500 */
+  font-size: 0.875rem; /* text-sm */
+}
+
+.error-state {
+  color: #ef4444; /* red-500 */
+}

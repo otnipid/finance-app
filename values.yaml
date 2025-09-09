@@ -1,0 +1,17 @@
+postgresql:
+  db: finance_db
+  user: finance_user
+  password: strongpassword
+  port: 5432
+  image: postgres:15
+
+persistence:
+  enabled: true
+  storageClass: "" 
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+image:
+  repository: pinto18/finance-api
+  tag: latest
+  pullPolicy: Always
