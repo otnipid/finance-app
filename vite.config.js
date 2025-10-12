@@ -14,10 +14,10 @@ export default defineConfig(({ mode }) => {
       proxy: {
         // Proxy all API requests that start with /api
         '/api': {
-          target: 'http://finance-api:80',
+          target: 'http://finance-api:80',  // The backend expects /api/...
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/api/, ''), // Remove /api prefix when forwarding
+          // Remove the rewrite to keep the /api prefix
         },
       },
     },
