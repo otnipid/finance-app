@@ -12,12 +12,17 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       strictPort: true,
       proxy: {
-        // Proxy all API requests that start with /api
-        '/api': {
+        // Proxy requests that start with /accounts to the backend
+        '/accounts': {
           target: 'http://finance-api:80',
           changeOrigin: true,
           secure: false,
-          rewrite: (path) => path.replace(/^\/api/, ''), // Remove /api prefix when forwarding
+        },
+        // Add other API endpoints here as needed
+        '/transactions': {
+          target: 'http://finance-api:80',
+          changeOrigin: true,
+          secure: false,
         },
       },
     },
