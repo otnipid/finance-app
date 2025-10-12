@@ -7,10 +7,10 @@ import {
 } from '../types';
 
 // In development, use relative URLs (handled by Vite proxy)
-// In production, use the full URL to the API service
+// In production, use the full URL to the API service with /api prefix
 const API_BASE_URL = import.meta.env.PROD 
-  ? 'http://finance-api:80'  // Production URL (in-cluster)
-  : '';                      // Development (relative URLs)
+  ? 'http://finance-api/api'  // Production URL (in-cluster) with /api prefix
+  : '/api';                   // Development (relative URLs) with /api prefix
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
