@@ -1,20 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
 import { cn } from '../../lib/utils';
-import { api, apiEndpoints } from '../lib/api';
+import { apiService } from '../lib/api';
+import { Account } from '../types';
 import '../styles/AccountsSidePanel.css';
 
-interface Account {
-  id: number;
-  name: string;
-  account_number_last4: string;
-  current_balance: number;
-  currency: string;
-}
-
 interface AccountsSidePanelProps {
-  selectedAccountId: number | null;
-  onAccountSelect: (id: number) => void;
+  selectedAccountId: string | null;
+  onAccountSelect: (id: string) => void;
 }
 
 export function AccountsSidePanel({ selectedAccountId, onAccountSelect }: AccountsSidePanelProps) {
@@ -27,7 +20,7 @@ export function AccountsSidePanel({ selectedAccountId, onAccountSelect }: Accoun
       try {
         setLoading(true);
         setError(null);
-        const response = await api.get(apiEndpoints.accounts.list);
+        const response = await apiService.getAccounts();
         setAccounts(response.data);
       } catch (err) {
         console.error('Error fetching accounts:', err);
@@ -41,16 +34,21 @@ export function AccountsSidePanel({ selectedAccountId, onAccountSelect }: Accoun
   }, []);
 
   // Calculate total net worth from all accounts
-  const netWorth = accounts.reduce((total, account) => total + (account.current_balance || 0), 0);
+  const netWorth = accounts.reduce((total, account) => total + (account.balance || 0), 0);
 
   // Format currency
-  const formatCurrency = (amount: number) => {
+  const formatCurrency = (amount: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
+      currency: currency || 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount);
+  };
+
+  // Extract last 4 digits of account ID for display
+  const getLastFourDigits = (id: string) => {
+    return id.slice(-4);
   };
 
   return (
@@ -76,13 +74,15 @@ export function AccountsSidePanel({ selectedAccountId, onAccountSelect }: Accoun
                 <div className="account-card-content">
                   <div className="account-info">
                     <div className="account-name">{account.name}</div>
-                    <div className="account-number">(xxxx{account.account_number_last4})</div>
+                    {account.org_name && (
+                      <div className="account-org">{account.org_name}</div>
+                    )}
+                    <div className="account-type">
+                      {account.type ? account.type.replace('_', ' ') : 'Account'} ••••{getLastFourDigits(account.id)}
+                    </div>
                   </div>
                   <div className="account-balance">
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: account.currency || 'USD',
-                    }).format(account.current_balance || 0)}
+                    {formatCurrency(account.balance || 0, account.currency)}
                   </div>
                 </div>
               </div>

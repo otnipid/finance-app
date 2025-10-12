@@ -1,20 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from './ui/card';
-import { api, apiEndpoints } from '../lib/api';
+import { apiService } from '../lib/api';
+import { Transaction } from '../types';
 import '../styles/MainContent.css';
 
-interface Transaction {
-  id: number;
-  date: string;
-  description: string;
-  amount: number;
-  currency: string;
-  category: string;
-  account_id: number;
-}
-
 interface TransactionsListProps {
-  accountId: number | null;
+  accountId: string | null;
 }
 
 export function TransactionsList({ accountId }: TransactionsListProps) {
@@ -32,10 +23,12 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
       try {
         setLoading(true);
         setError(null);
-        const response = await api.get(apiEndpoints.transactions.list, {
-          params: { account_id: accountId, sort: '-date' }
-        });
-        setTransactions(response.data);
+        const response = await apiService.getAccountTransactions(accountId);
+        // Sort transactions by posted_date in descending order
+        const sortedTransactions = [...response.data].sort((a, b) => 
+          new Date(b.posted_date).getTime() - new Date(a.posted_date).getTime()
+        );
+        setTransactions(sortedTransactions);
       } catch (err) {
         console.error('Error fetching transactions:', err);
         setError('Failed to load transactions. Please try again later.');
@@ -50,7 +43,7 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
   const formatCurrency = (amount: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: currency,
+      currency: currency || 'USD',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     }).format(amount);
@@ -98,19 +91,27 @@ export function TransactionsList({ accountId }: TransactionsListProps) {
           <Card key={transaction.id} className="transaction-card">
             <div className="transaction-card__content">
               <div className="transaction-card__info">
-                <h3>{transaction.description}</h3>
-                <p className="transaction-card__meta">
-                  {formatDate(transaction.date)} • {transaction.category || 'Uncategorized'}
-                </p>
+                <div className="transaction-card__description">
+                  {transaction.description || 'No description'}
+                </div>
+                <div className="transaction-card__details">
+                  <span className="transaction-card__date">
+                    {formatDate(transaction.posted_date)}
+                  </span>
+                  {transaction.payee && (
+                    <span className="transaction-card__payee">
+                      • {transaction.payee}
+                    </span>
+                  )}
+                  {transaction.memo && (
+                    <span className="transaction-card__memo">
+                      • {transaction.memo}
+                    </span>
+                  )}
+                </div>
               </div>
-              <div 
-                className={`transaction-card__amount ${
-                  transaction.amount < 0 
-                    ? 'transaction-card__amount--debit' 
-                    : 'transaction-card__amount--credit'
-                }`}
-              >
-                {formatCurrency(transaction.amount, transaction.currency)}
+              <div className={`transaction-card__amount ${transaction.amount < 0 ? 'negative' : 'positive'}`}>
+                {formatCurrency(transaction.amount, transaction.account?.currency)}
               </div>
             </div>
           </Card>
